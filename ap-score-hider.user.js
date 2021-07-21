@@ -2,7 +2,7 @@
 // @name         AP Score Hider
 // @namespace    http://tampermonkey.net/
 // @version      1.1
-// @description  try to take over the world!
+// @description  Hides AP Exam scores on the College Board website until you click on them. As a bonus, display confetti when you click on a passing exam.
 // @author       Samathingamajig
 // @match        https://apscore.collegeboard.org/scores/view-your-scores*
 // @icon         https://www.google.com/s2/favicons?domain=collegeboard.org
