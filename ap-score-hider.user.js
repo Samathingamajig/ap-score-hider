@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AP Score Hider
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  try to take over the world!
 // @author       Samathingamajig
 // @match        https://apscore.collegeboard.org/scores/view-your-scores*
@@ -14,7 +14,7 @@
     "use strict";
 
     // Grab all of the boxes that contain scores
-    const containers = document.querySelectorAll(".year-exams-container .row-fluid.item.last .span5:nth-child(2) span");
+    const containers = document.querySelectorAll(".year-exams-container .row-fluid.item .span5:nth-child(2) span");
 
     for (const container of containers) {
         const scoreEm = container.querySelector("em"); // Grab the text box that holds the score number
