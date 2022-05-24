@@ -2,9 +2,7 @@
 
 Normally when you go to check your AP Exam scores, you see all the scores at once. Since I'm often bored, I decided to solve this problem. With this script, you can make it so all your scores are hidden until you click "Your score" on each test. Since I was still bored after implementing this, I added confetti that explodes if you get a passing score (3+), with more the higher your score is.
 
-## 🎥 Demos:
-
-### 🎊 Here's a demo
+## 🎥 Demo
 
 ![Demo WebP](demo-1.2.1.webp)
 
