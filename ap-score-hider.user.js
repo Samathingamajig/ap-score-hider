@@ -1,30 +1,35 @@
 // ==UserScript==
 // @name         AP Score Hider
 // @namespace    http://tampermonkey.net/
-// @version      1.1
-// @description  try to take over the world!
+// @version      1.2
+// @description  Hides AP Exam scores on the College Board website until you click on them. As a bonus, display confetti when you click on a passing exam.
 // @author       Samathingamajig
-// @match        https://apscore.collegeboard.org/scores/view-your-scores*
+// @match        https://apstudents.collegeboard.org/view-scores*
 // @icon         https://www.google.com/s2/favicons?domain=collegeboard.org
 // @grant        none
-// @require      https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js
+// @require      https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js
 // ==/UserScript==
 
-(function () {
+(async function () {
     "use strict";
 
     // Grab all of the boxes that contain scores
-    const containers = document.querySelectorAll(".year-exams-container .row-fluid.item .span5:nth-child(2) span");
+    document.body.style.opacity = "0%";
+    let ccontainers = [];
+    while ((ccontainers = document.querySelectorAll(".apscores-card-col-left.display-flex")).length == 0) {await new Promise((res) => setTimeout(res, 10))}; // Wait for page to load
+    document.body.style.opacity = "100%";
 
-    for (const container of containers) {
-        const scoreEm = container.querySelector("em"); // Grab the text box that holds the score number
-        scoreEm.hidden = true; // Hide the score number
-        container.style.cursor = "pointer"; // Makes the mouse display a pointer when you hover over the place the score should be
+    for (const ccontainer of ccontainers) {
+        const container = ccontainer.querySelector(".apscores-badge.apscores-badge-score");
+        if (!container) continue; // Might've accidentally selected an award
+        const scoreEm = container.childNodes[1]; // Grab the text box that holds the score number
+        ccontainer.style.opacity = "0%"; // Hide the score number
+        ccontainer.style.cursor = "pointer"; // Makes the mouse display a pointer when you hover over the place the score should be
 
         const clickListener = (e) => {
-            const score = parseInt(scoreEm.innerText); // Get the score as a number (not a string)
+            const score = parseInt(scoreEm.nodeValue); // Get the score as a number (not a string)
             if (score >= 3) {
-                const { left, top } = container.getBoundingClientRect();
+                const { left, top } = ccontainer.getBoundingClientRect();
 
                 // Display confetti if score is >= 3, and the higher the score, the more confetti.
                 // This function comes from the `@require` section in the top of this file
@@ -33,15 +38,15 @@
                     spread: 160,
                     startVelocity: 50 * [0.6, 0.8, 1][score - 3],
                     origin: {
-                        x: (left + container.offsetWidth / 2) / window.innerWidth,
-                        y: (top + container.offsetHeight / 2) / window.innerHeight,
+                        x: (left + ccontainer.offsetWidth / 2) / window.innerWidth,
+                        y: (top + ccontainer.offsetHeight / 2) / window.innerHeight,
                     },
                 });
             }
-            scoreEm.hidden = false; // Show the score number
-            container.style.cursor = ""; // Don't show a pointer on hover anymore
-            container.removeEventListener("click", clickListener); // Delete the click listener so confetti doesn't show multiple times
+            ccontainer.style.opacity = "100%"; // Show the score number
+            ccontainer.style.cursor = ""; // Don't show a pointer on hover anymore
+            ccontainer.removeEventListener("click", clickListener); // Delete the click listener so confetti doesn't show multiple times
         };
-        container.addEventListener("click", clickListener); // Listen for a "click" event on each container in this loop
+        ccontainer.addEventListener("click", clickListener); // Listen for a "click" event on each container in this loop
     }
 })();
