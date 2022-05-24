@@ -4,13 +4,9 @@ Normally when you go to check your AP Exam scores, you see all the scores at onc
 
 ## 🎥 Demos:
 
-### 🎊 Here's an example with confetti enabled
+### 🎊 Here's a demo
 
-![Confetti Demo WebP](confetti-demo.webp)
-
-### 📚 Here's an example of multiple scores with confetti disabled:
-
-![Multiple Scores Demo WebP](multiple-scores-demo.webp)
+![Demo WebP](demo-1.2.1.webp)
 
 ## ⚡️ Is this a virus?
 
