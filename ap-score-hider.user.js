@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AP Score Hider
 // @namespace    http://tampermonkey.net/
-// @version      1.2
+// @version      1.2.1
 // @description  Hides AP Exam scores on the College Board website until you click on them. As a bonus, display confetti when you click on a passing exam.
 // @author       Samathingamajig
 // @match        https://apstudents.collegeboard.org/view-scores*
@@ -19,17 +19,19 @@
   while ((ccontainers = document.querySelectorAll(".apscores-card-col-left.display-flex")).length == 0) {
     await new Promise((res) => setTimeout(res, 10));
   } // Wait for page to load
-  document.body.style.opacity = "100%";
 
   for (const ccontainer of ccontainers) {
     const container = ccontainer.querySelector(".apscores-badge.apscores-badge-score");
     if (!container) continue; // Might've accidentally selected an award
-    const scoreEm = container.childNodes[1]; // Grab the text box that holds the score number
     ccontainer.style.opacity = "0%"; // Hide the score number
+    setTimeout(() => (ccontainer.style.transition = "opacity 500ms"), 600);
     ccontainer.style.cursor = "pointer"; // Makes the mouse display a pointer when you hover over the place the score should be
 
     const clickListener = (e) => {
-      const score = parseInt(scoreEm.nodeValue); // Get the score as a number (not a string)
+      const container = ccontainer.querySelector(".apscores-badge.apscores-badge-score"); // Have to do this again because reference gets messed
+      const scoreNode = container.childNodes[1]; // Grab the text box that holds the score number
+      const score = parseInt(scoreNode.nodeValue); // Get the score as a number (not a string)
+      console.log(score);
       if (score >= 3) {
         const { left, top } = ccontainer.getBoundingClientRect();
 
@@ -51,4 +53,5 @@
     };
     ccontainer.addEventListener("click", clickListener); // Listen for a "click" event on each container in this loop
   }
+  document.body.style.opacity = "100%";
 })();
