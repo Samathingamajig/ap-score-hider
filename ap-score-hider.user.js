@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AP Score Hider
 // @namespace    http://tampermonkey.net/
-// @version      1.2.1
+// @version      1.2.2
 // @description  Hides AP Exam scores on the College Board website until you click on them. As a bonus, display confetti when you click on a passing exam.
 // @author       Samathingamajig
 // @match        https://apstudents.collegeboard.org/view-scores*
@@ -16,8 +16,13 @@
   // Grab all of the boxes that contain scores
   document.body.style.opacity = "0%";
   let ccontainers = [];
+  let counter = 0;
   while ((ccontainers = document.querySelectorAll(".apscores-card-col-left.display-flex")).length == 0) {
     await new Promise((res) => setTimeout(res, 10));
+    if (++counter >= 500) {
+      document.body.style.opacity = "100%";
+      return; // Exit program after 5 seconds of loading
+    }
   } // Wait for page to load
 
   for (const ccontainer of ccontainers) {
