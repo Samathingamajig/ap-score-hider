@@ -6,7 +6,11 @@ Normally when you go to check your AP Exam scores, you see all the scores at onc
 
 - Note: The sidebar of scores (example: "Most U.S. colleges accept your score for credit and placement.") is now hidden and the whole score box is clickable, I'm just too lazy to remake the demo.
 
-![Demo WebP](demo-1.2.1.webp)
+<p align="center">
+  <a href="demo-1.2.1.gif">
+    <img src="demo-1.2.1.gif" />
+  </a>
+</p>
 
 ## ⚡️ Is this a virus?
 
