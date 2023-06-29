@@ -1,6 +1,6 @@
-# AP Score Hider
+# AP® Score Hider
 
-Normally when you go to check your AP Exam scores, you see all the scores at once. Since I'm often bored, I decided to solve this problem. With this script, you can make it so all your scores are hidden until you click "Your score" on each test. Since I was still bored after implementing this, I added confetti that explodes if you get a passing score (3+), with more the higher your score is.
+Normally when you go to check your AP® Exam scores, you see all the scores at once. Since I'm often bored, I decided to solve this problem. With this script, you can make it so all your scores are hidden until you click "Your score" on each test. Since I was still bored after implementing this, I added confetti that explodes if you get a passing score (3+), with more the higher your score is.
 
 ## 🎥 Demo
 
@@ -20,7 +20,7 @@ The code:
 
 - 🔓 is 100% open source (because it needs to be so you can install it)
 - 🔍 has very detailed comments on almost each line
-- 🔒 only runs on the specific AP Scores page
+- 🔒 only runs on the specific AP® Scores page
 - 📶 makes no network requests
 - 👨‍💻️ is written in JavaScript
 - 💻 can't do anything to your computer
@@ -39,3 +39,5 @@ If you don't want to use this script anymore, you can uninstall it anytime.
 
 - Navigate to the Tampermonkey dashboard (click the extension icon in the top right, then click "Dashboard" at the bottom of the popup)
 - Click the trashcan on the right side of the page
+
+AP® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this product.
