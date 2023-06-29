@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "AP® Score Hider",
   "version": "1.0.0",
-  "description": "Hides AP® Exam scores on the College Board website until you click on them. As a bonus, display confetti when you click on a passing exam.",
+  "description": "Hides AP® Exam scores on the College Board website until you click on them, and displays confetti if it's passing.",
   "permissions": [],
   "content_scripts": [
     {
