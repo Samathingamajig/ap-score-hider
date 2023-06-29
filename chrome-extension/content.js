@@ -14,9 +14,32 @@
 (async function () {
   "use strict";
 
-  let sound = null;
-  const selectSoundsObj = await chrome.storage.sync.get("selectedSounds")
-  const sounds = selectSoundsObj.selectedSounds
+  function playAudioInIframe(url) { // weird thing to get around college board not allowing external audio sources to be played
+    const previousIframe = document.getElementById("audioIframe")
+    if (previousIframe) previousIframe.remove()
+    let iframe = document.createElement('iframe')
+    iframe.id = "audioIframe"
+    iframe.src = chrome.runtime.getURL('/iframe/audioPlayerIframe.html');
+    iframe.allow = "autoplay"
+    iframe.style = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+  `;
+    iframe.frameBorder = 0;
+    iframe.scrolling = 'no';
+
+    iframe.addEventListener('load', () => {
+      iframe.contentWindow.postMessage(url, '*');
+    });
+
+    document.body.appendChild(iframe);
+  }
+
+  const selectSoundsObj = await chrome.storage.sync.get("selectedSounds") // get the response from storage
+  const sounds = selectSoundsObj.selectedSounds // get the object with the sound URLs
 
   // Grab all of the boxes that contain scores
   document.body.style.opacity = "0%"; // Hide the entire page until we can hide the scores themselves
@@ -48,6 +71,8 @@
       const container = ccontainer.querySelector(".apscores-badge.apscores-badge-score"); // Have to do this again because reference gets messed
       const scoreNode = container.childNodes[1]; // Grab the text box that holds the score number
       const score = parseInt(scoreNode.nodeValue); // Get the score as a number (not a string)
+      const soundURL = sounds[score.toString()]; // get the url from the stored sounds
+      playAudioInIframe(soundURL)
       if (score >= 3) {
         const { left, top } = ccontainer.getBoundingClientRect();
 
