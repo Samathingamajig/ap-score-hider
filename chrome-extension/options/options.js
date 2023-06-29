@@ -1,3 +1,11 @@
+const defaultSelected = {
+    "1" : "https://cdn.pixabay.com/download/audio/2021/08/04/audio_c003cb2711.mp3",
+    "2" : "https://cdn.pixabay.com/download/audio/2021/08/04/audio_c003cb2711.mp3",
+    "3" : "https://cdn.pixabay.com/download/audio/2022/03/24/audio_7c345b1d9d.mp3",
+    "4" : "https://cdn.pixabay.com/download/audio/2022/03/24/audio_7c345b1d9d.mp3",
+    "5" : "https://cdn.pixabay.com/download/audio/2022/03/24/audio_7c345b1d9d.mp3",
+}
+
 // Function to get sounds array from Chrome storage
 function getSoundsFromStorage(callback) {
     chrome.storage.sync.get("sounds", function (result) {
@@ -8,7 +16,8 @@ function getSoundsFromStorage(callback) {
 // Function to get selected sounds object from Chrome storage
 function getSelectedSoundsFromStorage(callback) {
     chrome.storage.sync.get("selectedSounds", function (result) {
-        callback(result.selectedSounds || {});
+        if (!result.selectedSounds) chrome.storage.sync.set({"selectedSounds": defaultSelected})
+        callback(result.selectedSounds || defaultSelected);
     });
 }
 
@@ -35,6 +44,12 @@ function fillSelectElements() {
                 defaultOpt.text = getDefaultSound(selectElement.id).title;
                 selectElement.appendChild(defaultOpt);
 
+                // Add "None" option
+                const noneOption = document.createElement("option");
+                noneOption.value = null;
+                noneOption.text = "None";
+                selectElement.appendChild(noneOption);
+
                 // Add sound titles as options
                 sounds.forEach(function (sound) {
                     const option = document.createElement("option");
@@ -44,7 +59,7 @@ function fillSelectElements() {
                 });
 
                 // Set the selected option based on stored selection or default sound
-                selectElement.value = selectedSounds[selectElement.id] || getDefaultSound(selectElement.id).URL;
+                selectElement.value = selectedSounds[selectElement.id] || getDefaultSound(selectElement.id).URL
             });
         });
     });
@@ -52,7 +67,7 @@ function fillSelectElements() {
 
 // Function to get the default sound URL based on score number (using royalty free, free to use sounds from pixabay)
 function getDefaultSound(scoreNumber) {
-    if (scoreNumber === "s1" || scoreNumber === "s2") {
+    if (scoreNumber == "1" || scoreNumber == "2") {
         return {URL: "https://cdn.pixabay.com/download/audio/2021/08/04/audio_c003cb2711.mp3", title: "Sad Trombone"};
     } else {
         return {URL: "https://cdn.pixabay.com/download/audio/2022/03/24/audio_7c345b1d9d.mp3", title: "Yay!"};
@@ -110,7 +125,6 @@ document.querySelectorAll(".song-select").forEach(function (selectElement) {
 
 // Call the function to fill select elements with sound titles
 fillSelectElements();
-
 
 let soundEffect = null;
 // Function to handle play button click event

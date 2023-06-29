@@ -14,6 +14,10 @@
 (async function () {
   "use strict";
 
+  let sound = null;
+  const selectSoundsObj = await chrome.storage.sync.get("selectedSounds")
+  const sounds = selectSoundsObj.selectedSounds
+
   // Grab all of the boxes that contain scores
   document.body.style.opacity = "0%"; // Hide the entire page until we can hide the scores themselves
   let ccontainers = [];
@@ -39,7 +43,7 @@
     ccontainer.parentNode.parentNode.style.cursor = "pointer"; // Makes the mouse display a pointer when you hover over the place the score should be
     ccontainer.parentNode.children[1].style.pointerEvents = "none"; // Make the sidebar not clickable
 
-    const clickListener = (e) => {
+    const clickListener  = (e) => {
       e.stopPropagation();
       const container = ccontainer.querySelector(".apscores-badge.apscores-badge-score"); // Have to do this again because reference gets messed
       const scoreNode = container.childNodes[1]; // Grab the text box that holds the score number

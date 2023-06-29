@@ -18,5 +18,9 @@
     "128": "icons/128.png",
     "512": "icons/512.png"
   },
-  "action": {}
+  "action": {},
+  "options_ui" : {
+    "page": "options/index.html",
+    "open_in_tab": true
+  }
 }
