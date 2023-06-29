@@ -12,7 +12,6 @@
 
 (async function () {
     "use strict";
-    let music = null;
 
     // Grab all of the boxes that contain scores
     document.body.style.opacity = "0%"; // Hide the entire page until we can hide the scores themselves
@@ -44,10 +43,7 @@
             const container = ccontainer.querySelector(".apscores-badge.apscores-badge-score"); // Have to do this again because reference gets messed
             const scoreNode = container.childNodes[1]; // Grab the text box that holds the score number
             const score = parseInt(scoreNode.nodeValue); // Get the score as a number (not a string)
-            if (music) music.pause()
             if (score >= 3) {
-                music = new Audio(chrome.runtime.getURL('music/victory.mp3'));
-                music.play();
                 const { left, top } = ccontainer.getBoundingClientRect();
 
                 // Display confetti if score is >= 3, and the higher the score, the more confetti.
@@ -62,10 +58,6 @@
                   },
                 });
               }
-            else {
-                    music = new Audio(chrome.runtime.getURL('music/no-trophy.mp3'))
-                    music.play()
-                }
                 ccontainer.style.opacity = "100%"; // Show the score number
                 ccontainer.parentNode.children[1].style.opacity = "100%"; // Show the sidebar of a score
                 ccontainer.parentNode.children[1].style.pointerEvents = ""; // Make the sidebar clickable again
