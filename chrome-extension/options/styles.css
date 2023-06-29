@@ -1,0 +1,66 @@
+/* CSS code for Peaches and Cream theme */
+
+/* Body */
+body {
+    background-color: #ffe5b4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Headings */
+h4, a {
+    color: #ffa07a;
+    margin: 0;
+    font-size: 20px;
+}
+
+/* Input and Button */
+input{
+    width: 200px;
+    padding: 5px;
+    margin: 10px;
+}
+
+button {
+    padding: 8px 16px;
+    background-color: #ffb6c1;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Table */
+table {
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ffdab9;
+}
+
+th {
+    background-color: #ffc0cb;
+    color: white;
+    font-weight: bold;
+    text-align: left;
+}
+
+/* Select Dropdowns */
+.song-select {
+    width: 200px;
+    padding: 5px;
+}
+
+/* Label */
+label {
+    font-weight: bold;
+}
