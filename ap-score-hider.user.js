@@ -1,13 +1,14 @@
 // ==UserScript==
-// @name         AP Score Hider
+// @name         AP® Score Hider
 // @namespace    http://tampermonkey.net/
-// @version      1.2.3
-// @description  Hides AP Exam scores on the College Board website until you click on them. As a bonus, display confetti when you click on a passing exam.
+// @version      1.2.4
+// @description  Hides AP® Exam scores on the College Board website until you click on them. As a bonus, display confetti when you click on a passing exam.
 // @author       Samathingamajig
 // @match        https://apstudents.collegeboard.org/view-scores*
 // @icon         https://www.google.com/s2/favicons?domain=collegeboard.org
 // @grant        none
 // @require      https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js
+// AP® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this product.
 // ==/UserScript==
 
 (async function () {
@@ -43,7 +44,6 @@
       const container = ccontainer.querySelector(".apscores-badge.apscores-badge-score"); // Have to do this again because reference gets messed
       const scoreNode = container.childNodes[1]; // Grab the text box that holds the score number
       const score = parseInt(scoreNode.nodeValue); // Get the score as a number (not a string)
-      console.log(score);
       if (score >= 3) {
         const { left, top } = ccontainer.getBoundingClientRect();
 
