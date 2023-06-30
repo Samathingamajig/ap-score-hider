@@ -2,7 +2,7 @@
 chrome.runtime.onInstalled.addListener(function (details) {
     if (details.reason === "install") {
         // Open options/index.html file in a new tab
-        chrome.tabs.create({ url: "options/index.html" });
+        chrome.tabs.create({ url: "options/index.html?justInstalled=true" });
     }
 });
 

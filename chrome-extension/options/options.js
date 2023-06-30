@@ -147,3 +147,11 @@ function handlePlayButtonClick(event) {
 document.querySelectorAll(".play-button").forEach(function (button) {
     button.addEventListener("click", handlePlayButtonClick);
 });
+
+// Get the URL parameters
+const urlParams = new URLSearchParams(window.location.search);
+
+// Check if the "justInstalled" parameter exists and its value is "true"
+if (urlParams.has('justInstalled') && urlParams.get('justInstalled') === 'true'){
+    document.getElementById("installThanks").style.display = "block"
+}
