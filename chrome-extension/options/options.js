@@ -44,12 +44,6 @@ function fillSelectElements() {
                 // Clear previous options
                 selectElement.innerHTML = "";
 
-                // Add default sounds
-                const defaultOpt = document.createElement("option");
-                defaultOpt.value = getDefaultSound(selectElement.id).URL;
-                defaultOpt.text = getDefaultSound(selectElement.id).title;
-                selectElement.appendChild(defaultOpt);
-
                 // Add "None" option
                 const noneOption = document.createElement("option");
                 noneOption.value = null;
