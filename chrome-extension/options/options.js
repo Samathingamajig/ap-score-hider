@@ -6,10 +6,16 @@ const defaultSelected = {
     "5" : "https://cdn.pixabay.com/download/audio/2022/03/24/audio_7c345b1d9d.mp3",
 }
 
+const defaultSoundList = [
+    {URL: "https://cdn.pixabay.com/download/audio/2021/08/04/audio_c003cb2711.mp3", title: "Sad Trombone"},
+    {URL: "https://cdn.pixabay.com/download/audio/2022/03/24/audio_7c345b1d9d.mp3", title: "Yay!"}
+]
+
 // Function to get sounds array from Chrome storage
 function getSoundsFromStorage(callback) {
     chrome.storage.sync.get("sounds", function (result) {
-        callback(result.sounds || []);
+        if (!result.sounds) chrome.storage.sync.set({"sounds": defaultSoundList})
+        callback(result.sounds || defaultSoundList);
     });
 }
 
