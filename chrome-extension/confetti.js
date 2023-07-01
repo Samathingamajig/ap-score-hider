@@ -2,16 +2,7 @@
 !(function (window, module) {
 // source content
     (function main(global, module, isWorker, workerSize) {
-        var canUseWorker = !!(
-            global.Worker &&
-            global.Blob &&
-            global.Promise &&
-            global.OffscreenCanvas &&
-            global.OffscreenCanvasRenderingContext2D &&
-            global.HTMLCanvasElement &&
-            global.HTMLCanvasElement.prototype.transferControlToOffscreen &&
-            global.URL &&
-            global.URL.createObjectURL);
+        var canUseWorker = false;
 
         function noop() {}
 
@@ -439,7 +430,7 @@
             var isLibCanvas = !canvas;
             var allowResize = !!prop(globalOpts || {}, 'resize');
             var globalDisableForReducedMotion = prop(globalOpts, 'disableForReducedMotion', Boolean);
-            var shouldUseWorker = canUseWorker && !!prop(globalOpts || {}, 'useWorker');
+            var shouldUseWorker = false;
             var worker = shouldUseWorker ? getWorker() : null;
             var resizer = isLibCanvas ? setCanvasWindowSize : setCanvasRectSize;
             var initialized = (canvas && worker) ? !!canvas.__confetti_initialized : false;

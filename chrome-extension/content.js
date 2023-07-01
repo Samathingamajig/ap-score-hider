@@ -14,11 +14,12 @@
 (async function () {
   "use strict";
 
-  function loadAudioInIframe(soundObj) { // weird thing to get around college board not allowing external audio sources to be played
-    let iframe = document.createElement('iframe')
-    iframe.id = "audioIframe"
-    iframe.src = chrome.runtime.getURL('/iframe/audioPlayerIframe.html');
-    iframe.allow = "autoplay"
+  function loadAudioInIframe(soundObj) {
+    // weird thing to get around college board not allowing external audio sources to be played
+    let iframe = document.createElement("iframe");
+    iframe.id = "audioIframe";
+    iframe.src = chrome.runtime.getURL("/iframe/audioPlayerIframe.html");
+    iframe.allow = "autoplay";
     iframe.style = `
     position: fixed;
     top: 0;
@@ -27,39 +28,41 @@
     height: 0;
     `;
     iframe.frameBorder = 0;
-    iframe.scrolling = 'no';
+    iframe.scrolling = "no";
 
-    iframe.addEventListener('load', () => {
-      iframe.contentWindow.postMessage({sounds: soundObj, message: "setup"}, '*');
+    iframe.addEventListener("load", () => {
+      iframe.contentWindow.postMessage({ sounds: soundObj, message: "setup" }, "*");
     });
 
     document.body.appendChild(iframe);
   }
 
-  function playSoundInFrame(score){
-      let iframe = document.getElementById("audioIframe")
-      iframe.contentWindow.postMessage({message: "score", score: score}, "*")
+  function playSoundInFrame(score) {
+    let iframe = document.getElementById("audioIframe");
+    iframe.contentWindow.postMessage({ message: "score", score: score }, "*");
   }
 
-  function getObjWithId(array, id){
-    for (let obj of array){
-      if (obj.id === id){
-        return obj
+  function getObjWithId(array, id) {
+    for (let obj of array) {
+      if (obj.id === id) {
+        return obj;
       }
     }
+    return null;
   }
 
-  const selectSoundsObj = await chrome.storage.local.get("selectedSounds") // get the response from storage
-  const selectedSounds = selectSoundsObj.selectedSounds
-  const soundStorage = await chrome.storage.local.get("sounds") // get the response from storage
-  const soundArray = soundStorage.sounds
-  let sounds = {}
+  const selectSoundsObj = await chrome.storage.local.get("selectedSounds"); // get the response from storage
+  const selectedSounds = selectSoundsObj.selectedSounds;
+  const soundStorage = await chrome.storage.local.get("sounds"); // get the response from storage
+  const soundArray = soundStorage.sounds;
+  let sounds = {};
 
-  for (let score in selectedSounds) { // basically transfering this new format to the old format
-    sounds[score] = getObjWithId(soundArray, selectedSounds[score]).URL
+  for (let score in selectedSounds) {
+    // basically transfering this new format to the old format
+    sounds[score] = getObjWithId(soundArray, selectedSounds[score])?.URL || "";
   }
-  console.log(sounds)
-  loadAudioInIframe(sounds)
+  // console.log(sounds);
+  loadAudioInIframe(sounds);
 
   // Grab all of the boxes that contain scores
   document.body.style.opacity = "0%"; // Hide the entire page until we can hide the scores themselves
@@ -86,12 +89,12 @@
     ccontainer.parentNode.parentNode.style.cursor = "pointer"; // Makes the mouse display a pointer when you hover over the place the score should be
     ccontainer.parentNode.children[1].style.pointerEvents = "none"; // Make the sidebar not clickable
 
-    const clickListener  = (e) => {
+    const clickListener = (e) => {
       e.stopPropagation();
       const container = ccontainer.querySelector(".apscores-badge.apscores-badge-score"); // Have to do this again because reference gets messed
       const scoreNode = container.childNodes[1]; // Grab the text box that holds the score number
       const score = parseInt(scoreNode.nodeValue); // Get the score as a number (not a string)
-      playSoundInFrame(score)
+      playSoundInFrame(score);
       if (score >= 3) {
         const { left, top } = ccontainer.getBoundingClientRect();
 
