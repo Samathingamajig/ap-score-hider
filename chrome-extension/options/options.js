@@ -91,6 +91,7 @@ async function addLocalSound(){
             getSoundsFromStorage(function (sounds){
                 sounds.push({ title: soundTitle, URL: result.savedAudio, id: generateUUID()});
                 chrome.storage.local.set({ sounds: sounds });
+                chrome.storage.local.set({localSave: false})
                 chrome.storage.local.remove("savedAudio")
                 location.reload();
             })
