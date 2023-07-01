@@ -226,7 +226,8 @@ function fillDeleteSoundsTable() {
                 deleteButton.addEventListener("click", function () {
                     getSoundsFromStorage(function (sounds) {
                         // Remove the sound from the sounds array
-                        sounds.splice(index, 1);
+                        getObjWithId(sounds, sound.id)
+                        sounds.splice(index, 1); // this is not a problem because we refresh the page anytime we delete or add a sound
 
                         // Save updated sounds array to storage
                         chrome.storage.local.set({sounds: sounds});
