@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AP® Score Hider Settings</title>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>AP® Score Hider Settings</h1>
+    <h2 id="installThanks" style="display:none">Thank you for installing!</h2>
+    <h4>Choose what sounds you want to play when you get your AP® Score!</h4>
+    <br>
+    <h4>Import sounds (use a direct .mp3 link or upload)</h4>
+    <table>
+        <tr>
+            <th>Sound Title</th>
+            <th>Direct link to sound file</th>
+        </tr>
+        <tr>
+            <td><input type="text" id=""></td>
+            <td><input type="url" id="sound-url"> or &nbsp; <label id="upload-label" for="audioFile"><input accept="audio/*" type="file" id="audioFile">Upload Sound</label></td>
+        </tr>
+    </table>
+    <button id="import-btn">Import sound</button>
+    <br>
+    <div id="tables">
+        <div>
+        <h4>Choose Sounds</h4>
+        <table>
+            <tr>
+                <th>Score</th>
+                <th>Sound Effect</th>
+                <th>Play Sound</th> <!-- New column for play sound button -->
+            </tr>
+            <tr>
+                <td><label for="1">1</label></td>
+                <td><select class="song-select" id="1"></select></td>
+                <td><button class="play-button">&#128266;</button></td>
+            </tr>
+            <tr>
+                <td><label for="2">2</label></td>
+                <td><select class="song-select" id="2"></select></td>
+                <td><button class="play-button">&#128266;</button></td>
+            </tr>
+            <tr>
+                <td><label for="3">3</label></td>
+                <td><select class="song-select" id="3"></select></td>
+                <td><button class="play-button">&#128266;</button></td>
+            </tr>
+            <tr>
+                <td><label for="4">4</label></td>
+                <td><select class="song-select" id="4"></select></td>
+                <td><button class="play-button">&#128266;</button></td>
+            </tr>
+            <tr>
+                <td><label for="5">5</label></td>
+                <td><select class="song-select" id="5"></select></td>
+                <td><button class="play-button">&#128266;</button></td>
+            </tr>
+        </table>
+        </div>
+        <div id="delete-div" style="display: none">
+        <h4>Delete Imported Sounds</h4>
+        <table id="deleteSounds">
+            <tr>
+                <th>Sound</th>
+                <th>Delete</th>
+            </tr>
+        </table>
+        </div>
+    </div>
+    <h4><a href="https://account.collegeboard.org/login/login?appId=287&idp=ECL&DURL=https%3A//apstudents.collegeboard.org/view-scores" target="_blank">View your AP® scores</a></h4>
+    <p><em>AP® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this product.</em></p>
+    <script src="options.js"></script>
+</body>
+</html>

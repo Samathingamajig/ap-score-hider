@@ -3,7 +3,10 @@
   "name": "AP® Score Hider",
   "version": "1.0.0",
   "description": "Hides AP® Exam scores on the College Board website until you click on them, and displays confetti if they're passing.",
-  "permissions": [],
+  "permissions": ["storage", "unlimitedStorage"],
+  "background": {
+    "service_worker": "background.js"
+  },
   "content_scripts": [
     {
       "matches": ["https://apstudents.collegeboard.org/view-scores*"],
@@ -14,5 +17,16 @@
     "48": "icons/48.png",
     "128": "icons/128.png",
     "512": "icons/512.png"
-  }
+  },
+  "action": {},
+  "options_ui" : {
+    "page": "options/index.html",
+    "open_in_tab": true
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["iframe/*"],
+      "matches": ["https://apstudents.collegeboard.org/*"]
+    }
+  ]
 }
