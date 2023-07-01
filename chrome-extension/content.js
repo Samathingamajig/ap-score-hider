@@ -25,7 +25,7 @@
     left: 0;
     width: 0;
     height: 0;
-  `;
+    `;
     iframe.frameBorder = 0;
     iframe.scrolling = 'no';
 
@@ -41,8 +41,24 @@
       iframe.contentWindow.postMessage({message: "score", score: score}, "*")
   }
 
-  const selectSoundsObj = await chrome.storage.sync.get("selectedSounds") // get the response from storage
-  const sounds = selectSoundsObj.selectedSounds // get the object with the sound URLs
+  function getObjWithId(array, id){
+    for (let obj of array){
+      if (obj.id === id){
+        return obj
+      }
+    }
+  }
+
+  const selectSoundsObj = await chrome.storage.local.get("selectedSounds") // get the response from storage
+  const selectedSounds = selectSoundsObj.selectedSounds
+  const soundStorage = await chrome.storage.local.get("sounds") // get the response from storage
+  const soundArray = soundStorage.sounds
+  let sounds = {}
+
+  for (let score in selectedSounds) { // basically transfering this new format to the old format
+    sounds[score] = getObjWithId(soundArray, selectedSounds[score]).URL
+  }
+  console.log(sounds)
   loadAudioInIframe(sounds)
 
   // Grab all of the boxes that contain scores

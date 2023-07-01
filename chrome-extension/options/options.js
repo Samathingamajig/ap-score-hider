@@ -1,35 +1,43 @@
 const defaultSelected = {
-    "1" : "https://cdn.pixabay.com/download/audio/2021/08/04/audio_c003cb2711.mp3",
-    "2" : "https://cdn.pixabay.com/download/audio/2021/08/04/audio_c003cb2711.mp3",
-    "3" : "https://cdn.pixabay.com/download/audio/2022/03/24/audio_7c345b1d9d.mp3",
-    "4" : "https://cdn.pixabay.com/download/audio/2022/03/24/audio_7c345b1d9d.mp3",
-    "5" : "https://cdn.pixabay.com/download/audio/2022/03/24/audio_7c345b1d9d.mp3",
+    "1" : "0",
+    "2" : "0",
+    "3" : "1",
+    "4" : "1",
+    "5" : "1",
 }
 
 const defaultSoundList = [
-    {URL: "https://cdn.pixabay.com/download/audio/2021/08/04/audio_c003cb2711.mp3", title: "Sad Trombone"},
-    {URL: "https://cdn.pixabay.com/download/audio/2022/03/24/audio_7c345b1d9d.mp3", title: "Yay!"}
+    {URL: "https://cdn.pixabay.com/download/audio/2021/08/04/audio_c003cb2711.mp3", title: "Sad Trombone", id: "0"},
+    {URL: "https://cdn.pixabay.com/download/audio/2022/03/24/audio_7c345b1d9d.mp3", title: "Yay!", id: "1"}
 ]
+
+function generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0,
+            v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
 
 // Function to get sounds array from Chrome storage
 function getSoundsFromStorage(callback) {
-    chrome.storage.sync.get("sounds", function (result) {
-        if (!result.sounds) chrome.storage.sync.set({"sounds": defaultSoundList})
+    chrome.storage.local.get("sounds", function (result) {
+        if (!result.sounds) chrome.storage.local.set({"sounds": defaultSoundList})
         callback(result.sounds || defaultSoundList);
     });
 }
 
 // Function to get selected sounds object from Chrome storage
 function getSelectedSoundsFromStorage(callback) {
-    chrome.storage.sync.get("selectedSounds", function (result) {
-        if (!result.selectedSounds) chrome.storage.sync.set({"selectedSounds": defaultSelected})
+    chrome.storage.local.get("selectedSounds", function (result) {
+        if (!result.selectedSounds) chrome.storage.local.set({"selectedSounds": defaultSelected})
         callback(result.selectedSounds || defaultSelected);
     });
 }
 
 // Function to save selected sounds to Chrome storage
 function saveSelectedSoundsToStorage(selectedSounds) {
-    chrome.storage.sync.set({ selectedSounds: selectedSounds });
+    chrome.storage.local.set({ selectedSounds: selectedSounds });
 }
 // Function to fill in select elements with sound titles
 function fillSelectElements() {
@@ -53,13 +61,14 @@ function fillSelectElements() {
                 // Add sound titles as options
                 sounds.forEach(function (sound) {
                     const option = document.createElement("option");
-                    option.value = sound.URL;
+                    option.value = sound.id;
+                    option.dataset.url = sound.URL
                     option.text = sound.title;
                     selectElement.appendChild(option);
                 });
 
                 // Set the selected option based on stored selection or default sound
-                selectElement.value = selectedSounds[selectElement.id] || getDefaultSound(selectElement.id).URL
+                selectElement.value = selectedSounds[selectElement.id] || getDefaultSound(selectElement.id)
             });
         });
     });
@@ -68,10 +77,37 @@ function fillSelectElements() {
 // Function to get the default sound URL based on score number (using royalty free, free to use sounds from pixabay)
 function getDefaultSound(scoreNumber) {
     if (scoreNumber == "1" || scoreNumber == "2") {
-        return {URL: "https://cdn.pixabay.com/download/audio/2021/08/04/audio_c003cb2711.mp3", title: "Sad Trombone"};
+        return "0";
     } else {
-        return {URL: "https://cdn.pixabay.com/download/audio/2022/03/24/audio_7c345b1d9d.mp3", title: "Yay!"};
+        return "1";
     }
+}
+
+async function addLocalSound(){
+    const soundTitleInput = document.querySelector("table input[type='text']");
+    const soundTitle = soundTitleInput.value.trim();
+    chrome.storage.local.get({savedAudio: null}, function (result){
+        if (result.savedAudio) {
+            getSoundsFromStorage(function (sounds){
+                sounds.push({ title: soundTitle, URL: result.savedAudio, id: generateUUID()});
+                chrome.storage.local.set({ sounds: sounds });
+                chrome.storage.local.remove("savedAudio")
+                location.reload();
+            })
+        }
+    })
+
+}
+
+function handleAdd(){
+    chrome.storage.local.get({localSave: false}, function (result){
+        if (result.localSave === true){
+            addLocalSound()
+        }
+        else {
+            addSound()
+        }
+    })
 }
 
 // Function to validate URL and add sound to the songs array
@@ -87,10 +123,10 @@ function addSound() {
         // Get sounds array from storage
         getSoundsFromStorage(function (sounds) {
             // Add new sound object to sounds array
-            sounds.push({ title: soundTitle, URL: soundURL });
+            sounds.push({ title: soundTitle, URL: soundURL, id: generateUUID()});
 
             // Save updated sounds array to storage
-            chrome.storage.sync.set({ sounds: sounds });
+            chrome.storage.local.set({ sounds: sounds });
 
             // Refresh the page
             location.reload();
@@ -116,7 +152,7 @@ function handleSongSelectionChange(event) {
 }
 
 // Event listener for "Import sound" button click
-document.getElementById("import-btn").addEventListener("click", addSound);
+document.getElementById("import-btn").addEventListener("click", handleAdd);
 
 // Event listener for song select element change
 document.querySelectorAll(".song-select").forEach(function (selectElement) {
@@ -126,22 +162,96 @@ document.querySelectorAll(".song-select").forEach(function (selectElement) {
 // Call the function to fill select elements with sound titles
 fillSelectElements();
 
+function getObjWithId(array, id){
+    for (let obj of array){
+        if (obj.id === id){
+            return obj
+        }
+    }
+}
+
 let soundEffect = null;
 // Function to handle play button click event
 function handlePlayButtonClick(event) {
     const row = event.target.closest("tr");
     const selectElement = row.querySelector("select.song-select");
 
-    const selectedSoundUrl = selectElement.value;
+    getSoundsFromStorage(function (sounds){
+        const selectedSoundUrl = getObjWithId(sounds, selectElement.value).URL;
 
-    if (selectedSoundUrl) {
-        if (soundEffect) soundEffect.pause()
-        soundEffect = new Audio(selectedSoundUrl)
-        soundEffect.play()
-    } else {
-        alert("Please select a sound before playing.");
+        if (selectedSoundUrl) {
+            if (soundEffect) soundEffect.pause()
+            soundEffect = new Audio(selectedSoundUrl)
+            soundEffect.play()
+        } else {
+            alert("Please select a sound before playing.");
+        }
+    })
+}
+
+function handleFileUpload(event) {
+    document.getElementById("sound-url").disabled = true
+    var file = event.target.files[0];
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            // Save the audio file to chrome.storage.local
+            chrome.storage.local.set({savedAudio: e.target.result});
+            chrome.storage.local.set({localSave: true})
+            document.getElementById("upload-label").innerText = "File Uploaded!"
+        };
+        reader.readAsDataURL(file);
     }
 }
+
+document.getElementById('audioFile').addEventListener('change', (e) => handleFileUpload(e))
+
+
+function fillDeleteSoundsTable() {
+    const deleteSoundsTable = document.getElementById("deleteSounds");
+
+    // Get sounds from storage
+    getSoundsFromStorage(function (sounds) {
+        if (sounds.length > 2) {
+            // Add sound rows
+            sounds.forEach(function (sound, index) {
+                if (sound.id == "1" || sound.id == "0") return;
+                const row = deleteSoundsTable.insertRow();
+                const soundCell = row.insertCell();
+                const deleteCell = row.insertCell();
+                soundCell.textContent = sound.title;
+
+                const deleteButton = document.createElement("button");
+                deleteButton.textContent = "Delete";
+                deleteButton.addEventListener("click", function () {
+                    getSoundsFromStorage(function (sounds) {
+                        // Remove the sound from the sounds array
+                        sounds.splice(index, 1);
+
+                        // Save updated sounds array to storage
+                        chrome.storage.local.set({sounds: sounds});
+
+                        // Refresh the table
+                        location.reload()
+                    })
+                });
+
+                deleteCell.appendChild(deleteButton);
+            });
+            const row = deleteSoundsTable.insertRow()
+            const cell = row.insertCell()
+            cell.insertAdjacentHTML("afterbegin", `<button id="deleteAll">Delete All Sounds</button><br><p><strong>Warning: this is permanent</strong></p>`)
+            document.getElementById("deleteAll").addEventListener("click", function () {
+                chrome.storage.local.set({"sounds": defaultSoundList})
+                location.reload()
+            })
+            document.getElementById("delete-div").style.display = "block"
+        }
+    });
+}
+
+// Call the function to populate the delete sounds table
+fillDeleteSoundsTable();
 
 // Event listener for play button click
 document.querySelectorAll(".play-button").forEach(function (button) {
