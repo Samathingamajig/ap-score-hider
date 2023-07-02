@@ -1,6 +1,12 @@
 # AP® Score Hider
 
-Normally when you go to check your AP® Exam scores, you see all the scores at once. Since I'm often bored, I decided to solve this problem. With this script, you can make it so all your scores are hidden until you click "Your score" on each test. Since I was still bored after implementing this, I added confetti that explodes if you get a passing score (3+), with more the higher your score is.
+You spend hundreds of hours in classes and even more doing homework, yet your reward for taking an AP® Exam is a single digit. Even worse, once you go to your scores page it shows them all at once, which is very anticlimactic. Introducing AP® Score Hider. With this extension, all of your exam scores are hidden until you click on the box containing the score. If you get a 3, 4, or 5, confetti blasts off. The higher the score, the more confetti.
+
+A highly requested feature was sound effects upon revealing a score, so we have that too\*. On the options page, which opens upon installation or clicking the icon, you can customize which sound effect plays for each score, 1-5. We've provided some defaults, but you can either disable sound effects or add your own via a URL or a direct file upload (which never gets uploaded to the internet).
+
+This extension/userscript only runs on the webpage for viewing scores, we can't see your password or any other sensitive info, and we don't keep track of your scores. It just hides the scores until they're clicked on, plus the bonus features of confetti and sound effects\*.
+
+- = Sound effects and their customization are only available with the Chrome extension version, not the userscript, at least for now
 
 ## 🎥 Demo
 
@@ -27,6 +33,12 @@ The code:
 
 ## 📜 Installation
 
+## Option 1: Chrome extension (recommended)
+
+Follow the instructions here https://github.com/Samathingamajig/ap-score-hider/releases/tag/v1.0.0
+
+## Options 2: Userscript
+
 - Install Tampermonkey from the [Chrome Web Store](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) (or [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/))
 - After this, you have two options (only do one of these):
   - **GreasyFork** _(recommended)_: Go to the [GreasyFork page](https://greasyfork.org/en/scripts/429680-ap-score-hider) and click the green "Install this script" button. This will take you to a page on Tampermonkey where you need to click "Install" to install the script.
@@ -35,7 +47,11 @@ The code:
 
 ## 🚫 Uninstallation
 
-If you don't want to use this script anymore, you can uninstall it anytime.
+If you don't want to use this extension/script anymore, you can uninstall it anytime.
+
+If you installed the Chrome extension, just go to `chrome://extensions` and click "Remove" on the AP® Score Hider card.
+
+If you installed the userscript with Tampermonkey,
 
 - Navigate to the Tampermonkey dashboard (click the extension icon in the top right, then click "Dashboard" at the bottom of the popup)
 - Click the trashcan on the right side of the page
