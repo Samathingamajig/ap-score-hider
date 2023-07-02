@@ -33,17 +33,24 @@ The code:
 
 ## 📜 Installation
 
-## Option 1: Chrome extension (recommended)
+## Option 1: Chrome extension from the Chrome Web Store (recommended)
 
-Follow the instructions here https://github.com/Samathingamajig/ap-score-hider/releases/tag/v1.0.0
+Download the Chrome extension from the Chrome Web Store: https://chrome.google.com/webstore/detail/ap%C2%AE-score-hider/jfeofgolbklfnkjdogghbmbgnonkgace
 
-## Options 2: Userscript
+## Option 2: Userscript
 
 - Install Tampermonkey from the [Chrome Web Store](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) (or [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/))
 - After this, you have two options (only do one of these):
   - **GreasyFork** _(recommended)_: Go to the [GreasyFork page](https://greasyfork.org/en/scripts/429680-ap-score-hider) and click the green "Install this script" button. This will take you to a page on Tampermonkey where you need to click "Install" to install the script.
   - **GitHub/Manual install** _(not recommended)_: Go to the [raw script page](https://raw.githubusercontent.com/Samathingamajig/ap-score-hider/main/ap-score-hider.user.js). Tampermonkey will automatically detect this file as a userscript (since the file is named `*.user.js`), so click the "Install" button to install it. If it doesn't, copy the entire contents of the script into the Tampermonkey script editor (**make sure you save**).
   - If none of these work, look up how to install a Tampermonkey userscript.
+ 
+## Option 3: Manual installation as a Chrome extension
+
+- Download this git repository
+- In a new tab, open `chrome://extensions`
+- In the top right, toggle "Developer mode" to on
+- In the top left, select "Load unpacked" and select the folder "chrome-extension" (the folder that contains the manifest.json file) from this repo
 
 ## 🚫 Uninstallation
 
