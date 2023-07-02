@@ -6,7 +6,7 @@ A highly requested feature was sound effects upon revealing a score, so we have 
 
 This extension/userscript only runs on the webpage for viewing scores, we can't see your password or any other sensitive info, and we don't keep track of your scores. It just hides the scores until they're clicked on, plus the bonus features of confetti and sound effects\*.
 
-- = Sound effects and their customization are only available with the Chrome extension version, not the userscript, at least for now
+\* = Sound effects and their customization are only available with the Chrome extension version, not the userscript, at least for now
 
 ## 🎥 Demo
 
