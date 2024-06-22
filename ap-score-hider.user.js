@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         AP® Score Hider
+// @name         AP® Score Hider and Reorder
 // @namespace    http://tampermonkey.net/
-// @version      1.2.4
-// @description  Hides AP® Exam scores on the College Board website until you click on them. As a bonus, display confetti when you click on a passing exam.
+// @version      1.2.5
+// @description  Hides AP® Exam scores on the College Board website until you click on them, and reorders them to display 5s first. Displays confetti when you click on a passing exam.
 // @author       Samathingamajig
 // @match        https://apstudents.collegeboard.org/view-scores*
 // @icon         https://www.google.com/s2/favicons?domain=collegeboard.org
@@ -25,6 +25,17 @@
       return; // Exit program after 5 seconds of loading
     }
   } // Wait for page to load
+
+  // Reorder score containers to have 5s first
+  const parentContainer = ccontainers[0].closest('.apscores-card-col.display-flex');
+  const scoreContainers = Array.from(ccontainers).map(ccontainer => {
+    const container = ccontainer.querySelector(".apscores-badge.apscores-badge-score");
+    const score = container ? parseInt(container.textContent.trim()) : null;
+    return { ccontainer, score };
+  });
+
+  scoreContainers.sort((a, b) => b.score - a.score);
+  scoreContainers.forEach(({ ccontainer }) => parentContainer.appendChild(ccontainer.closest('.apscores-card')));
 
   for (let i = 0; i < ccontainers.length; i++) {
     // Iterate through all the score boxes
