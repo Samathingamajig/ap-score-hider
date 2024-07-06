@@ -5,7 +5,8 @@
   "description": "Hides AP® Exam scores on the College Board website until clicked on, plays sounds, & displays confetti if they're passing.",
   "permissions": ["storage", "unlimitedStorage"],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "scripts": ["background.js"]
   },
   "content_scripts": [
     {
