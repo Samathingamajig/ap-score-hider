@@ -7,14 +7,14 @@ const defaultSelected = {
 };
 
 const defaultSoundList = [
-  { URL: chrome.runtime.getURL("/audio/pixabay-sad-trombone.mp3"), title: "Sad Trombone", id: "0" },
-  { URL: chrome.runtime.getURL("/audio/pixabay-success-trumpet.mp3"), title: "Success Trumpet", id: "1" },
+  { URL: browser.runtime.getURL("/audio/pixabay-sad-trombone.mp3"), title: "Sad Trombone", id: "0" },
+  { URL: browser.runtime.getURL("/audio/pixabay-success-trumpet.mp3"), title: "Success Trumpet", id: "1" },
   {
-    URL: chrome.runtime.getURL("/audio/jimmy-kinda-saw.mp3"),
+    URL: browser.runtime.getURL("/audio/jimmy-kinda-saw.mp3"),
     title: "JimmyHere - Kinda saw something like that coming",
     id: "2",
   },
-  { URL: chrome.runtime.getURL("/audio/charlie-yeah-baby.mp3"), title: "Charlie - Woo yeah baby!", id: "3" },
+  { URL: browser.runtime.getURL("/audio/charlie-yeah-baby.mp3"), title: "Charlie - Woo yeah baby!", id: "3" },
 ];
 
 function generateUUID() {
@@ -27,23 +27,23 @@ function generateUUID() {
 
 // Function to get sounds array from Chrome storage
 function getSoundsFromStorage(callback) {
-  chrome.storage.local.get("sounds", function (result) {
-    if (!result.sounds) chrome.storage.local.set({ sounds: defaultSoundList });
+  browser.storage.local.get("sounds").then((result) => {
+    if (!result.sounds) browser.storage.local.set({ sounds: defaultSoundList });
     callback(result.sounds || defaultSoundList);
   });
 }
 
 // Function to get selected sounds object from Chrome storage
 function getSelectedSoundsFromStorage(callback) {
-  chrome.storage.local.get("selectedSounds", function (result) {
-    if (!result.selectedSounds) chrome.storage.local.set({ selectedSounds: defaultSelected });
+  browser.storage.local.get("selectedSounds").then((result) => {
+    if (!result.selectedSounds) browser.storage.local.set({ selectedSounds: defaultSelected });
     callback(result.selectedSounds || defaultSelected);
   });
 }
 
 // Function to save selected sounds to Chrome storage
 function saveSelectedSoundsToStorage(selectedSounds) {
-  chrome.storage.local.set({ selectedSounds: selectedSounds });
+  browser.storage.local.set({ selectedSounds: selectedSounds });
 }
 // Function to fill in select elements with sound titles
 function fillSelectElements() {
@@ -91,14 +91,16 @@ function getDefaultSound(scoreNumber) {
 
 async function addLocalSound() {
   const soundTitleInput = document.querySelector("table input[type='text']");
-  chrome.storage.local.get({ savedAudio: null, savedAudioTitle: "" }, function (result) {
+  browser.storage.local.get({ savedAudio: null, savedAudioTitle: "" }).then((result) => {
     if (result.savedAudio) {
       const soundTitle = soundTitleInput.value.trim() || result.savedAudioTitle;
-      getSoundsFromStorage(function (sounds) {
+      getSoundsFromStorage(async function (sounds) {
         sounds.push({ title: soundTitle, URL: result.savedAudio, id: generateUUID() });
-        chrome.storage.local.set({ sounds: sounds });
-        chrome.storage.local.set({ localSave: false });
-        chrome.storage.local.remove("savedAudio");
+        await Promise.allSettled([
+          browser.storage.local.set({ sounds: sounds }),
+          browser.storage.local.set({ localSave: false }),
+          browser.storage.local.remove("savedAudio"),
+        ]);
         location.reload();
       });
     }
@@ -106,7 +108,7 @@ async function addLocalSound() {
 }
 
 function handleAdd() {
-  chrome.storage.local.get({ localSave: false }, function (result) {
+  browser.storage.local.get({ localSave: false }).then((result) => {
     if (result.localSave === true) {
       addLocalSound();
     } else {
@@ -131,7 +133,7 @@ function addSound() {
       sounds.push({ title: soundTitle, URL: soundURL, id: generateUUID() });
 
       // Save updated sounds array to storage
-      chrome.storage.local.set({ sounds: sounds });
+      browser.storage.local.set({ sounds: sounds });
 
       // Refresh the page
       location.reload();
@@ -200,10 +202,10 @@ function handleFileUpload(file) {
   if (file) {
     var reader = new FileReader();
     reader.onload = function (e) {
-      // Save the audio file to chrome.storage.local
-      chrome.storage.local.set({ savedAudio: e.target.result });
-      chrome.storage.local.set({ savedAudioTitle: file.name });
-      chrome.storage.local.set({ localSave: true });
+      // Save the audio file to browser.storage.local
+      browser.storage.local.set({ savedAudio: e.target.result });
+      browser.storage.local.set({ savedAudioTitle: file.name });
+      browser.storage.local.set({ localSave: true });
       document.getElementById("upload-label").innerText = "File Uploaded!";
     };
     reader.readAsDataURL(file);
@@ -242,7 +244,7 @@ function fillDeleteSoundsTable() {
             sounds.splice(index, 1); // this is not a problem because we refresh the page anytime we delete or add a sound
 
             // Save updated sounds array to storage
-            chrome.storage.local.set({ sounds: sounds });
+            browser.storage.local.set({ sounds: sounds });
 
             // Refresh the table
             location.reload();
@@ -258,7 +260,7 @@ function fillDeleteSoundsTable() {
         `<button id="deleteAll">Delete All Sounds</button><br><p><strong>Warning: this is permanent</strong></p>`,
       );
       document.getElementById("deleteAll").addEventListener("click", function () {
-        chrome.storage.local.set({ sounds: defaultSoundList });
+        browser.storage.local.set({ sounds: defaultSoundList });
         location.reload();
       });
       document.getElementById("delete-div").style.display = "block";

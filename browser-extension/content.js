@@ -18,7 +18,7 @@
     // weird thing to get around college board not allowing external audio sources to be played
     let iframe = document.createElement("iframe");
     iframe.id = "audioIframe";
-    iframe.src = chrome.runtime.getURL("/iframe/audioPlayerIframe.html");
+    iframe.src = browser.runtime.getURL("/iframe/audioPlayerIframe.html");
     iframe.allow = "autoplay";
     iframe.style = `
     position: fixed;
@@ -51,9 +51,9 @@
     return null;
   }
 
-  const selectSoundsObj = await chrome.storage.local.get("selectedSounds"); // get the response from storage
+  const selectSoundsObj = await browser.storage.local.get("selectedSounds"); // get the response from storage
   const selectedSounds = selectSoundsObj.selectedSounds;
-  const soundStorage = await chrome.storage.local.get("sounds"); // get the response from storage
+  const soundStorage = await browser.storage.local.get("sounds"); // get the response from storage
   const soundArray = soundStorage.sounds;
   let sounds = {};
 
