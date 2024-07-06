@@ -11,8 +11,6 @@
 // AP® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this product.
 // ==/UserScript==
 
-var browser = browser || chrome;
-
 (async function () {
   "use strict";
 

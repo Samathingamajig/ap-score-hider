@@ -1,4 +1,8 @@
-var browser = browser || chrome;
+try {
+  importScripts("vendor/browser-polyfill.min.js");
+} catch (e) {
+  console.error(e);
+}
 
 // Event listener for extension installation
 browser.runtime.onInstalled.addListener(function (details) {

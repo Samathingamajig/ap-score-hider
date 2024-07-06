@@ -1,5 +1,3 @@
-var browser = browser || chrome;
-
 const defaultSelected = {
   1: "2",
   2: "0",
@@ -29,7 +27,7 @@ function generateUUID() {
 
 // Function to get sounds array from Chrome storage
 function getSoundsFromStorage(callback) {
-  browser.storage.local.get("sounds", function (result) {
+  browser.storage.local.get("sounds").then((result) => {
     if (!result.sounds) browser.storage.local.set({ sounds: defaultSoundList });
     callback(result.sounds || defaultSoundList);
   });
@@ -37,7 +35,7 @@ function getSoundsFromStorage(callback) {
 
 // Function to get selected sounds object from Chrome storage
 function getSelectedSoundsFromStorage(callback) {
-  browser.storage.local.get("selectedSounds", function (result) {
+  browser.storage.local.get("selectedSounds").then((result) => {
     if (!result.selectedSounds) browser.storage.local.set({ selectedSounds: defaultSelected });
     callback(result.selectedSounds || defaultSelected);
   });
@@ -93,14 +91,16 @@ function getDefaultSound(scoreNumber) {
 
 async function addLocalSound() {
   const soundTitleInput = document.querySelector("table input[type='text']");
-  browser.storage.local.get({ savedAudio: null, savedAudioTitle: "" }, function (result) {
+  browser.storage.local.get({ savedAudio: null, savedAudioTitle: "" }).then((result) => {
     if (result.savedAudio) {
       const soundTitle = soundTitleInput.value.trim() || result.savedAudioTitle;
-      getSoundsFromStorage(function (sounds) {
+      getSoundsFromStorage(async function (sounds) {
         sounds.push({ title: soundTitle, URL: result.savedAudio, id: generateUUID() });
-        browser.storage.local.set({ sounds: sounds });
-        browser.storage.local.set({ localSave: false });
-        browser.storage.local.remove("savedAudio");
+        await Promise.allSettled([
+          browser.storage.local.set({ sounds: sounds }),
+          browser.storage.local.set({ localSave: false }),
+          browser.storage.local.remove("savedAudio"),
+        ]);
         location.reload();
       });
     }
@@ -108,7 +108,7 @@ async function addLocalSound() {
 }
 
 function handleAdd() {
-  browser.storage.local.get({ localSave: false }, function (result) {
+  browser.storage.local.get({ localSave: false }).then((result) => {
     if (result.localSave === true) {
       addLocalSound();
     } else {
@@ -202,7 +202,7 @@ function handleFileUpload(file) {
   if (file) {
     var reader = new FileReader();
     reader.onload = function (e) {
-      // Save the audio file to chrome.storage.local
+      // Save the audio file to browser.storage.local
       browser.storage.local.set({ savedAudio: e.target.result });
       browser.storage.local.set({ savedAudioTitle: file.name });
       browser.storage.local.set({ localSave: true });
